@@ -13,13 +13,6 @@ mongoose.connect(mongoDb);
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "mongo connection error"));
 
-const User = mongoose.model(
-  "User",
-  new Schema({
-    username: { type: String, required: true },
-    password: { type: String, required: true }
-  })
-);
 
 const app = express();
 app.set("views", path.join(__dirname , 'views'));
