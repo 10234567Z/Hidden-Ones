@@ -7,7 +7,8 @@ const UserSchema = new Schema({
     lastName: {type: String , required: true , minlength: 5 },
     userName: {type: String , required: true , minlength: 1 },
     isMember: {type: Boolean , required: true},
-    isAdmin: {type: Boolean , required: true},
+    hash: {type: String , required: true},
+    isAdmin: {type: String , required: true},
 })
 
 UserSchema.virtual("url").get(function(){

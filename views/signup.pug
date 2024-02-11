@@ -1,0 +1,22 @@
+extends layout 
+block content 
+    form(method="POST")
+        label(for="fname") First Name:
+        input(type="text" id="fname" name="fname" required) 
+        br
+        label(for="lname") Last Name:
+        input(type="text" id="lname" name="lname" required) 
+        br
+        label(for="uname") UserName:
+        input(type="text" id="uname" name="uname" required) 
+        br
+        label(for="pass") Password:
+        input(type="password" id="pass" name="pass" required) 
+        br
+        label(for="cpass") Confirm Password:
+        input(type="password" id="cpass" name="cpass" required) 
+        br
+        label(for="isAdmin") Admin ? 
+        input(type="checkbox" id="isAdmin" name="isAdmin" required) 
+        br
+        button.btn.btn-primary(type='submit') Submit 

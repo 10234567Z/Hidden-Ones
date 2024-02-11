@@ -8,6 +8,8 @@ const LocalStrategy = require("passport-local").Strategy;
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
+const indexRouter = require("./routes/index")
+
 const mongoDb = process.env.MONGODB_URI;
 mongoose.connect(mongoDb);
 const db = mongoose.connection;
@@ -23,6 +25,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
 
-app.get("/", (req, res) => res.render("layout"));
+app.use("/", indexRouter);
 
 app.listen(3000, () => console.log("app listening on port 3000!"));
