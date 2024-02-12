@@ -17,6 +17,7 @@ block content
         input(type="password" id="cpass" name="cpass" required) 
         br
         label(for="isAdmin") Admin ? 
-        input(type="checkbox" id="isAdmin" name="isAdmin" required) 
+        input(type="hidden" id="isAdmin" name="isAdmin" value="no") 
+        input(type="checkbox" id="isAdmin" name="isAdmin" value="yes") 
         br
         button.btn.btn-primary(type='submit') Submit 

@@ -1,0 +1,7 @@
+extend layout 
+block content 
+    h1 Welcome #{user.firstName}
+    form(method="POST")
+        label(for="clubPass") Enter the password of club : 
+        input(type="password" id="clubPass" name="clubPass" required) 
+        button(type="submit") Submit 
