@@ -4,12 +4,19 @@ block content
         h1 Welcome back #{user.userName}
         a(href="/join-club")
             button.btn.btn-primary Join Club 
+        br
         a(href="/logout")
             button.btn.btn-primary Logout
+        br
+        a(href="/create")
+            button.btn.btn-primary Create New Message
     else if user && user.isMember === true 
         h1 Welcome back #{user.userName}
         a(href="/logout")
             button.btn.btn-primary Logout
+        br
+        a(href="/create")
+            button.btn.btn-primary Create New Message
     else
         a(href="/sign-up") Sign Up 
         br
