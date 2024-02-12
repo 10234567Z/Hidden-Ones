@@ -17,6 +17,10 @@ router.get('/join-club' , (req , res , next) => {
     res.render("join_club", { user: app.get("CurrentUser")})
 })
 
+router.get('/login' , (req , res , next) => {
+    res.render('login')
+})
+
 router.post('/join-club' , [
     body('clubPass').custom(async (value) => {
         if(value !== "deez nuts"){
