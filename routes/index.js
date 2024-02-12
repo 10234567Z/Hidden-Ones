@@ -5,39 +5,93 @@ const User = require("../models/user")
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const app = express()
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+
+
 router.get('/', (req, res, next) => {
-    res.render("index")
+    res.render("index", { user: req.user })
 })
 
 router.get('/sign-up', (req, res, next) => {
     res.render("signup")
 })
 
-router.get('/join-club' , (req , res , next) => {
-    res.render("join_club", { user: app.get("CurrentUser")})
+router.get('/join-club', (req, res, next) => {
+    res.render("join_club", { user: req.user || app.get("CurrentUser") })
 })
 
-router.get('/login' , (req , res , next) => {
+router.get('/login', (req, res, next) => {
     res.render('login')
 })
 
-router.post('/join-club' , [
+passport.use(
+    new LocalStrategy(async (username, password, done) => {
+        try {
+            const user = await User.findOne({ userName: username });
+            if (!user) {
+                return done(null, false, { message: "Incorrect username" });
+            };
+            const match = await bcrypt.compare(password, user.hash)
+            if (!match) {
+                return done(null, false, { message: "Incorrect Password" })
+            }
+            return done(null, user);
+        } catch (err) {
+            return done(err);
+        };
+    })
+);
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const user = await User.findById(id);
+        done(null, user);
+    } catch (err) {
+        done(err);
+    };
+});
+
+router.post('/login', passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/'
+}))
+
+app.use((req, res, next) => {
+    res.locals.currentUser = req.user;
+    next();
+});
+
+router.get("/logout", (req, res, next) => {
+    req.logout((err) => {
+        if (err) {
+            return next(err);
+        }
+        res.redirect("/");
+    });
+});
+
+router.post('/join-club', [
     body('clubPass').custom(async (value) => {
-        if(value !== "deez nuts"){
+        if (value !== "deez nuts") {
             throw new Error("Incorrect club password , Entry denied. Login with this account below and join club with correct password")
         }
     }),
-    asyncHandler(async (req , res , next) => {
+    asyncHandler(async (req, res, next) => {
         const error = validationResult(req)
         if (!error.isEmpty()) {
-            const user = app.get('CurrentUser')
+            const user = req.user || app.get('CurrentUser')
             await user.save()
             return res.render("error", { msg: error.errors[0].msg })
         }
-        const user = app.get('CurrentUser')
+        const user = req.user || app.get('CurrentUser')
         user.isMember = true;
         await user.save()
-        app.set('CurrentUser' , {})
+        app.set('CurrentUser', {})
         res.render('success')
     })
 ])
@@ -72,7 +126,7 @@ router.post('/sign-up', [
                     hash: hashedPassword,
                     isAdmin: req.body.isAdmin,
                 })
-                app.set("CurrentUser" , user)
+                app.set("CurrentUser", user)
                 console.log(req.body.isAdmin)
                 res.redirect('/join-club')
             }

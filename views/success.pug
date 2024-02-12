@@ -1,4 +1,8 @@
 extend layout 
 block content 
-    p Successfully made the account , You now 
-        a(href="/") Go home and login with details   
+    if currentUser !== null 
+        p You are now a club member  
+            a(href="/") Go back home 
+    else 
+        p Successfully made the account , You now 
+            a(href="/") Go home and login with details  
