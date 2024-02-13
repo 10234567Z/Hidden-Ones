@@ -25,6 +25,10 @@ router.get('/login', (req, res, next) => {
     res.render('login')
 })
 
+router.get('/fail' , (req , res , next) => {
+    res.render('fail')
+})
+
 passport.use(
     new LocalStrategy(async (username, password, done) => {
         try {
@@ -58,7 +62,7 @@ passport.deserializeUser(async (id, done) => {
 
 router.post('/login', passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/'
+    failureRedirect: '/fail'
 }))
 
 app.use((req, res, next) => {
@@ -127,7 +131,6 @@ router.post('/sign-up', [
                     isAdmin: req.body.isAdmin,
                 })
                 app.set("CurrentUser", user)
-                console.log(req.body.isAdmin)
                 res.redirect('/join-club')
             }
         })
