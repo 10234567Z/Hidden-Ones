@@ -20,3 +20,17 @@ block content
         br
         a(href="/login") Login   
 
+    if messages.length 
+
+        each text in messages 
+            p ________________
+            h3 #{text.title}
+            p  #{text.text} 
+            if user && user.isMember === true
+                h6 #{text.timestamp}
+                h6 #{text.user.userName} 
+            if user && user.isAdmin === "yes"
+                br
+                button.btn.btn-primary(type='submit') Delete 
+
+

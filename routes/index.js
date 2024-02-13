@@ -10,9 +10,10 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 
 
-router.get('/', (req, res, next) => {
-    res.render("index", { user: req.user })
-})
+router.get('/', asyncHandler(async (req, res, next) => {
+    const messages = await Message.find({})
+    res.render("index", { user: req.user, messages: messages })
+}))
 
 router.get('/sign-up', (req, res, next) => {
     res.render("signup")
