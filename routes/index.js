@@ -90,6 +90,11 @@ router.get("/logout", (req, res, next) => {
     });
 });
 
+router.post("/delete/:id" , asyncHandler(async(req , res , next) => {
+    await Message.findByIdAndDelete(req.params.id)
+    res.redirect('/')
+}))
+
 router.post("/create", [
     body('message')
         .trim()
