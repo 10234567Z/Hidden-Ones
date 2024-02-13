@@ -2,6 +2,7 @@ const express = require('express');
 const bcrypt = require("bcryptjs")
 const router = express.Router();
 const User = require("../models/user")
+const Message = require("../models/message")
 const { body, validationResult } = require("express-validator");
 const asyncHandler = require("express-async-handler");
 const app = express()
@@ -25,8 +26,12 @@ router.get('/login', (req, res, next) => {
     res.render('login')
 })
 
-router.get('/fail' , (req , res , next) => {
+router.get('/fail', (req, res, next) => {
     res.render('fail')
+})
+
+router.get('/create', (req, res, next) => {
+    res.render('create')
 })
 
 passport.use(
@@ -78,6 +83,41 @@ router.get("/logout", (req, res, next) => {
         res.redirect("/");
     });
 });
+
+router.post("/create", [
+    body('message')
+        .trim()
+        .isLength({ min: 1 })
+        .escape()
+        .withMessage("Message is not long enough"),
+    body('title')
+        .trim()
+        .isLength({ min: 1 })
+        .escape()
+        .withMessage("Title is not long enough"),
+    asyncHandler(async (req, res, next) => {
+        const error = validationResult(req)
+        if (!error.isEmpty()) {
+            return res.render("error", { msg: error.errors[0].msg })
+        }
+        const currentdate = new Date();
+        const datetime = currentdate.getDate() + "/"
+            + (currentdate.getMonth() + 1) + "/"
+            + currentdate.getFullYear() + " @ "
+            + currentdate.getHours() + ":"
+            + currentdate.getMinutes() + ":"
+            + currentdate.getSeconds();
+
+        const message = new Message({
+            title: req.body.title,
+            timestamp: datetime,
+            text: req.body.message,
+            user: req.user._id
+        })
+        await message.save()
+        res.redirect('/')
+    })
+])
 
 router.post('/join-club', [
     body('clubPass').custom(async (value) => {

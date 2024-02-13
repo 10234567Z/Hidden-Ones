@@ -8,8 +8,6 @@ block content
         a(href="/logout")
             button.btn.btn-primary Logout
         br
-        a(href="/create")
-            button.btn.btn-primary Create New Message
     else if user && user.isMember === true 
         h1 Welcome back #{user.userName}
         a(href="/logout")

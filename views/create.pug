@@ -1,0 +1,12 @@
+extend layout 
+block content 
+    form(method="post")
+        label(for="messageTitle") Type you message title here
+        br
+        input(  type="text",name="title" id="messageTitle" , required)
+        br
+        label(for="messageBox") Type you message in here
+        br
+        textarea(name="message", cols="30", rows="10" , id="messageBox" , required)
+        br
+        button.btn.btn-primary(type='submit') Send
