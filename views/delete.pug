@@ -1,0 +1,9 @@
+extend layout 
+block content
+    form(method="POST") 
+        p Are you sure you want to delete this message?
+        h5 #{message.title}
+        p #{message.text}
+        h6 #{message.user.userName}
+        br
+        button.btn.btn-primary(type='submit') Yes

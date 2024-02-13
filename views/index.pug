@@ -31,6 +31,7 @@ block content
                 h6 #{text.user.userName} 
             if user && user.isAdmin === "yes"
                 br
-                button.btn.btn-primary(type='submit') Delete 
+                a(href=`delete/${text._id}`)
+                    button.btn.btn-primary Delete 
 
 

@@ -35,6 +35,11 @@ router.get('/create', (req, res, next) => {
     res.render('create')
 })
 
+router.get('/delete/:id' , asyncHandler(async(req , res , next) => {
+    const message = await Message.findById(req.params.id).populate('user').exec()
+    res.render('delete' , { message: message})
+}))
+
 passport.use(
     new LocalStrategy(async (username, password, done) => {
         try {
