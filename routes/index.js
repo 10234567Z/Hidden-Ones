@@ -11,7 +11,7 @@ const LocalStrategy = require("passport-local").Strategy;
 
 
 router.get('/', asyncHandler(async (req, res, next) => {
-    const messages = await Message.find({})
+    const messages = await Message.find({}).populate('user').exec()
     res.render("index", { user: req.user, messages: messages })
 }))
 
@@ -169,10 +169,17 @@ router.post('/sign-up', [
                     userName: req.body.uname,
                     isMember: false,
                     hash: hashedPassword,
-                    isAdmin: req.body.isAdmin,
+                    isAdmin: req.body.isAdmin || "no",
                 })
-                app.set("CurrentUser", user)
-                res.redirect('/join-club')
+                if (user.isAdmin === "yes") {
+                    user.isMember = true;
+                    await user.save()
+                    res.render('success')
+                }
+                else {
+                    app.set("CurrentUser", user)
+                    res.redirect('/join-club')
+                }
             }
         })
 

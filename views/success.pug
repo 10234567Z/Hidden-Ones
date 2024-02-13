@@ -1,7 +1,7 @@
 extend layout 
 block content 
-    if currentUser !== null 
-        p You are now a club member  
+    if currentUser !== undefined 
+        p You are now a club member #{currentUser.username}
             a(href="/") Go back home 
     else 
         p Successfully made the account , You now 
